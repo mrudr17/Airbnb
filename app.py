@@ -1,5 +1,10 @@
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns  
+import numpy as np
+
+
 from pandas.api.types import (
     is_categorical_dtype,
     is_datetime64_any_dtype,
@@ -7,14 +12,8 @@ from pandas.api.types import (
     is_object_dtype
 )
 
+url = 'https://github.com/mrudr17/Airbnb/blob/main/WK2_Airbnb_Amsterdam_listings_proj_solution.csv'
 st.title("Filter your Airbnb Listings dataframe!")
-
-st.write(
-    """This app is based on this blog [here](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/). 
-    Can you think of ways to extend it with visuals?
-    """
-)
-
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -93,5 +92,24 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 df = pd.read_csv(
     "WK2_Airbnb_Amsterdam_listings_proj_solution.csv", index_col=0
+    
 )
-st.dataframe(filter_dataframe(df))
+
+fil_df = filter_dataframe(df)
+
+st.dataframe(fil_df)
+
+#st.write(fil_df.columns)
+
+st.header('Categorical Data visualization')
+
+fig = plt.figure(figsize=(10, 4))
+
+for col in fil_df.columns:
+    if (fil_df[col].dtype == 'bool' or fil_df[col].dtype == 'object'):
+       sns.countplot(x=col, data=fil_df)
+       st.pyplot(fig)
+   # else: 
+   #    st.write(fil_df[col].dtype)
+   #    sns.boxplot(x=col, data=fil_df) 
+   #    st.pyplot(fig)
